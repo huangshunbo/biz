@@ -1,0 +1,38 @@
+apply from: "${rootProject.rootDir}/common_config.gradle"
+if(!project.ext.isIndipandence){
+    project.ext.setLibDefaultConfig project
+}else{
+    project.ext.setAppDefaultConfig project
+}
+
+android {
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if(project.ext.isIndipandence){
+                manifest.srcFile 'src/debug/AndroidManifest.xml'
+                res.srcDirs = ['src/debug/res','src/main/res']
+            }else{
+                manifest.srcFile 'src/debug/AndroidManifest.xml'
+                resources {
+                    exclude 'src/debug/*'
+                }
+            }
+        }
+    }
+
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
